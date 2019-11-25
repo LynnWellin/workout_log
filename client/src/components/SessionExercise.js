@@ -86,9 +86,6 @@ class SessionExercise extends Component {
                     {exercise}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                    {/* {new Array(sets).fill(sets).map((el, ind) => (
-                        <Set key={ind + 1} number={ind + 1} />
-                    ))} */}
                     {sets.map((el, ind) => (
                         <Set
                             number={ind + 1}
