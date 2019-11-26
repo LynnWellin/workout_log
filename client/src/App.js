@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Session from './components/Session';
+import RequestReset from './components/RequestReset';
+import Login from './components/Login';
 import Register from './components/Register';
 import CreateRoutine from './components/CreateRoutine';
 import LandingPage from './components/LandingPage';
@@ -30,6 +32,12 @@ class App extends Component {
                             </Route>
                             <Route exact path="/users/register">
                                 <Register />
+                            </Route>
+                            <Route exact path="/users/login">
+                                <Login />
+                            </Route>
+                            <Route exact path="/users/password/forgot">
+                                <RequestReset Reset />
                             </Route>
                             <Route exact path="/users/routines/create">
                                 <CreateRoutine />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
-import { TextField, Container, Button, Link } from '@material-ui/core';
+import { TextField, Container, Button, Link, Typography, Box } from '@material-ui/core';
 
 const AppStyle = theme => ({
     container: {
@@ -20,21 +20,17 @@ class Field {
     }
 }
 
-class Register extends Component {
+class RequestReset extends Component {
     state = {
-        first: new Field('first', 'First name'),
-        last: new Field('last', 'Last name'),
         email: new Field('email', 'Email'),
-        password: new Field('password', 'Password', true),
-        confirm: new Field('confirm', 'Confirm password', true),
     };
 
-    registerUser(e) {
+    loginUser(e) {
         e.preventDefault();
-        const { first, last, email, password, confirm } = this.state;
-        const fields = [first, last, email, password, confirm];
+        const { email, password } = this.state;
+        const fields = [email, password];
         if (fields.some(el => el.error != null)) return;
-        console.log(first);
+        console.log(email);
     }
 
     updateField(field, value) {
@@ -49,11 +45,17 @@ class Register extends Component {
 
     render() {
         const { classes } = this.props;
-        const { first, last, email, password, confirm } = this.state;
-        const fields = [first, last, email, password, confirm];
+        const { email } = this.state;
+        const fields = [email];
         return (
             <Container>
-                <form className={classes.container} onSubmit={e => this.registerUser(e)}>
+                <form className={classes.container} onSubmit={e => this.loginUser(e)}>
+                    <Typography>
+                        <Box>
+                            Forgot your password? Enter your email below, and we will send you an
+                            email with reset instructions
+                        </Box>
+                    </Typography>
                     {fields.map(field => (
                         <TextField
                             key={field.label}
@@ -67,12 +69,12 @@ class Register extends Component {
                             variant="outlined"
                         />
                     ))}
-                    <Button type="submit">Register</Button>
-                    <Link href="/users/login">Already have an account? Login here</Link>
+                    <Button type="submit">Request reset</Button>
+                    <Link href="/users/login">Login here</Link>
                 </form>
             </Container>
         );
     }
 }
 
-export default withStyles(AppStyle)(Register);
+export default withStyles(AppStyle)(RequestReset);

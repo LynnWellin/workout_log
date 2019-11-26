@@ -20,21 +20,18 @@ class Field {
     }
 }
 
-class Register extends Component {
+class Login extends Component {
     state = {
-        first: new Field('first', 'First name'),
-        last: new Field('last', 'Last name'),
         email: new Field('email', 'Email'),
         password: new Field('password', 'Password', true),
-        confirm: new Field('confirm', 'Confirm password', true),
     };
 
-    registerUser(e) {
+    loginUser(e) {
         e.preventDefault();
-        const { first, last, email, password, confirm } = this.state;
-        const fields = [first, last, email, password, confirm];
+        const { email, password } = this.state;
+        const fields = [email, password];
         if (fields.some(el => el.error != null)) return;
-        console.log(first);
+        console.log(email);
     }
 
     updateField(field, value) {
@@ -49,11 +46,11 @@ class Register extends Component {
 
     render() {
         const { classes } = this.props;
-        const { first, last, email, password, confirm } = this.state;
-        const fields = [first, last, email, password, confirm];
+        const { email, password } = this.state;
+        const fields = [email, password];
         return (
             <Container>
-                <form className={classes.container} onSubmit={e => this.registerUser(e)}>
+                <form className={classes.container} onSubmit={e => this.loginUser(e)}>
                     {fields.map(field => (
                         <TextField
                             key={field.label}
@@ -67,12 +64,13 @@ class Register extends Component {
                             variant="outlined"
                         />
                     ))}
-                    <Button type="submit">Register</Button>
-                    <Link href="/users/login">Already have an account? Login here</Link>
+                    <Button type="submit">Login</Button>
+                    <Link href="/users/register">New? Register here</Link>
+                    <Link href="/users/password/forgot">Forgot password? Reset here</Link>
                 </form>
             </Container>
         );
     }
 }
 
-export default withStyles(AppStyle)(Register);
+export default withStyles(AppStyle)(Login);
