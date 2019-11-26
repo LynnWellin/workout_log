@@ -3,6 +3,7 @@ import './App.css';
 
 import Session from './components/Session';
 import CreateRoutine from './components/CreateRoutine';
+import LandingPage from './components/LandingPage';
 
 import { withStyles } from '@material-ui/styles';
 
@@ -15,7 +16,8 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="App-header">
-                    <CreateRoutine />
+                    {/* <CreateRoutine /> */}
+                    <LandingPage />
                 </div>
             </div>
         );
