@@ -77,3 +77,4 @@ class App extends Component {
 }
 
 export default withStyles(AppStyle)(App);
+// export default connect(null, { addSession })(withStyles(AppStyle)(App));
