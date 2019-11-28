@@ -21,6 +21,7 @@ const SessionStyles = theme => ({
         '&$expanded': {
             margin: 0,
             borderBottom: 'solid 1px #00000020',
+            borderTop: 'solid 1px #00000020',
         },
     },
     expanded: {},
@@ -37,7 +38,7 @@ class SessionExercise extends Component {
     constructor(props) {
         super(props);
         let sets = [];
-        for (let i = 0; i < this.props.sets; i++) {
+        for (let i = 0; i < props.sets; i++) {
             sets.push(new SetData());
         }
         this.state = { sets };
@@ -74,20 +75,17 @@ class SessionExercise extends Component {
     }
 
     render() {
-        const { classes, exercise } = this.props;
+        const { classes, exercise, type } = this.props;
         const { sets } = this.state;
         return (
-            <ExpansionPanel
-                // expanded={{ test: { background: 'black' } }}
-                id={exercise}
-                classes={classes}
-            >
+            <ExpansionPanel id={exercise} classes={classes}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     {exercise}
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
                     {sets.map((el, ind) => (
                         <Set
+                            type={type}
                             number={ind + 1}
                             {...el}
                             update={(field, value) => this.updateSet(ind, field, value)}
