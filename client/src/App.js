@@ -57,9 +57,7 @@ class App extends Component {
                             />
                         ) : (
                             <Switch>
-                                <Route exact path="/users/home">
-                                    <UserHomepage />
-                                </Route>
+                                <Route exact path="/users/home" component={UserHomepage} />
                                 <Route exact path="/users/session">
                                     <Session />
                                 </Route>
@@ -77,4 +75,3 @@ class App extends Component {
 }
 
 export default withStyles(AppStyle)(App);
-// export default connect(null, { addSession })(withStyles(AppStyle)(App));
