@@ -43,7 +43,7 @@ class UserHomepage extends Component {
         this.setState({ openDialog: false });
     }
 
-    handleClick() {
+    addSession() {
         const { routines } = this.state;
         if (routines.length > 0) {
             this.setState({ openDialog: true });
@@ -59,12 +59,13 @@ class UserHomepage extends Component {
         return (
             <div className={classes.container}>
                 <Button onClick={this.handleAddSession} color="primary" variant="contained">
-                    Start Blank Session
+                    Create Blank Session
                 </Button>
-                <Link href="/users/session">Workout</Link>
-                <Link href="/users/createroutine">Add Routine</Link>
                 <AppBar>
-                    <Toolbar></Toolbar>
+                    <Toolbar>
+                        <Button href="/users/home">Dashboard</Button>
+                        <Button href="/users/createroutine">Create Routine</Button>
+                    </Toolbar>
                 </AppBar>
                 <h2>Today's Sessions:</h2>
                 {sessions.map(el => (
@@ -74,12 +75,10 @@ class UserHomepage extends Component {
                     </div>
                 ))}
                 {sessions.length === 0 ? (
-                    <Typography>
-                        <Box>Start a workout!</Box>
-                    </Typography>
+                    <Button onClick={() => this.addSession()}>Start a workout!</Button>
                 ) : null}
                 <Fab
-                    onClick={() => this.handleClick()}
+                    onClick={() => this.addSession()}
                     size="medium"
                     color="secondary"
                     className={classes.addButton}

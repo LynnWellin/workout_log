@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    IconButton,
     TextField,
     Button,
     Select,
@@ -7,10 +8,16 @@ import {
     FormControl,
     InputLabel,
     Fab,
+    Stepper,
+    Step,
+    StepLabel,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import { withStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
+import DirectionsRunRoundedIcon from '@material-ui/icons/DirectionsRunRounded';
+import FitnessCenterRoundedIcon from '@material-ui/icons/FitnessCenterRounded';
 
 const Styles = theme => ({
     container: {
@@ -27,47 +34,116 @@ const Styles = theme => ({
         minWidth: '120px',
         background: '#ffffff',
     },
+    addExerciseDiv: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        background: 'gray',
+        maxWidth: '165px',
+        margin: '5px',
+        borderRadius: '50px',
+    },
     fab: {
-        margin: '10px',
+        // margin: '10px',
+    },
+    icon: {
+        height: '50px',
+        width: '50px',
+        margin: '0 2px',
+    },
+    selected: {
+        background: '#A1CCA5',
     },
 });
 
-class Routine {
-    constructor(name, weekday) {
-        this.name = name;
-        this.weekday = weekday;
-    }
-}
+const steps = ['Name Routine', 'Add Exercises'];
 
 class CreateRoutine extends Component {
-    state = { step: 1, routine: new Routine('Deadlift', 'mon') };
+    state = { step: 0, routine: { name: '', weekday: '' } };
 
-    createRoutine(name, weekday) {
-        console.log(name, weekday);
-        this.setState({ step: 1, routine: new Routine(name, weekday) });
+    updateField(field, value) {
+        let { routine } = this.state;
+        routine[field] = value;
+        console.log(routine);
+        this.setState({ routine });
+    }
+
+    handleBack() {
+        const { step } = this.state;
+        this.setState({ step: step - 1 });
+    }
+
+    handleNext() {
+        const { step } = this.state;
+        const { routine } = this.state;
+        if (step === 0) {
+            if (routine.name === '') return this.setState({ inputError: 'Name cannot be empty.' });
+        }
+        if (step === 1) {
+            // Ensure at least one exercise
+            // Ensure all exercises have a name
+            // Ensuer all exercies have a min of 1 set
+        }
+        if (step === 2) {
+        }
+        this.setState({ step: step + 1 });
     }
 
     render() {
         const { classes } = this.props;
-        const { step, routine } = this.state;
-        console.log(step);
+        const { step, routine, inputError } = this.state;
         return (
             <div>
                 <h1>Create new Routine</h1>
                 {step === 0 ? (
                     <FirstStep
+                        inputError={inputError}
                         classes={classes}
-                        createRoutine={(name, weekday) => this.createRoutine(name, weekday)}
+                        routine={routine}
+                        updateField={(field, value) => this.updateField(field, value)}
                     />
                 ) : null}
-                {step === 1 ? <AddExercises classes={classes} routine={routine} /> : null}
+                {step === 1 ? (
+                    <AddExercises
+                        inputError={inputError}
+                        classes={classes}
+                        routine={routine}
+                        updateField={(field, value) => this.updateField(field, value)}
+                    />
+                ) : null}
+                <Stepper activeStep={step}>
+                    {steps.map((label, index) => {
+                        return (
+                            <Step>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
+                <div>
+                    <Button
+                        disabled={step === 0}
+                        onClick={() => this.handleBack()}
+                        className={classes.button}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => this.handleNext()}
+                        className={classes.button}
+                    >
+                        {step === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                </div>
             </div>
         );
     }
 }
 
 class AddExercises extends Component {
-    state = { exercises: [{ name: '', sets: '' }] };
+    state = { exercises: [{ name: '', sets: '' }], addType: true };
 
     deleteExercise(ind) {
         const { exercises } = this.state;
@@ -93,7 +169,7 @@ class AddExercises extends Component {
 
     render() {
         const { classes, routine } = this.props;
-        const { exercises } = this.state;
+        const { exercises, addType } = this.state;
         const last = exercises.length === 1 ? true : false;
         return (
             <div>
@@ -119,47 +195,48 @@ class AddExercises extends Component {
                         ></Button>
                     </div>
                 ))}
-                <Fab className={classes.fab} onClick={() => this.addExercise()}>
-                    <AddIcon />
-                </Fab>
+                <div className={classes.addExerciseDiv}>
+                    <IconButton
+                        className={clsx(classes.icon, addType && classes.selected)}
+                        onClick={() => this.setState({ addType: true })}
+                    >
+                        <FitnessCenterRoundedIcon />
+                    </IconButton>
+                    <IconButton
+                        className={clsx(classes.icon, !addType && classes.selected)}
+                        onClick={() => this.setState({ addType: false })}
+                    >
+                        <DirectionsRunRoundedIcon />
+                    </IconButton>
+                    <Fab className={classes.fab} onClick={() => this.addExercise()}>
+                        <AddIcon />
+                    </Fab>
+                </div>
             </div>
         );
     }
 }
 
 class FirstStep extends Component {
-    state = { name: '', weekday: '', inputError: null };
-
-    completeStep() {
-        const { name, weekday } = this.state;
-        if (name != null && name !== '') {
-            this.props.createRoutine(name, weekday !== '' ? weekday : null);
-        } else {
-            this.setState({ inputError: 'Routine name is required' });
-        }
-    }
-
     render() {
-        const { classes } = this.props;
-        const { inputError, name, weekday } = this.state;
+        const { classes, inputError, routine, updateField } = this.props;
+        const { name, weekday } = routine;
+        console.log(inputError);
         return (
             <div className={classes.container}>
                 <TextField
                     className={classes.input}
                     value={name}
-                    onChange={e => this.setState({ name: e.target.value })}
+                    onChange={e => updateField('name', e.target.value)}
                     error={!!inputError}
                     helperText={inputError}
                     label="Routine Name"
-                    variant="filled"
+                    // variant="filled"
                     required
                 />
-                <FormControl className={classes.formControl} variant="filled">
+                <FormControl className={classes.formControl} /*variant="filled"*/>
                     <InputLabel>Weekday</InputLabel>
-                    <Select
-                        value={weekday}
-                        onChange={e => this.setState({ weekday: e.target.value })}
-                    >
+                    <Select value={weekday} onChange={e => updateField('weekday', e.target.value)}>
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
@@ -172,9 +249,6 @@ class FirstStep extends Component {
                         <MenuItem value="sun">Sunday</MenuItem>
                     </Select>
                 </FormControl>
-                <Button variant="contained" onClick={() => this.completeStep()}>
-                    Next
-                </Button>
             </div>
         );
     }
