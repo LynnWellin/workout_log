@@ -15,9 +15,7 @@ import {
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import DirectionsRunRoundedIcon from '@material-ui/icons/DirectionsRunRounded';
-import FitnessCenterRoundedIcon from '@material-ui/icons/FitnessCenterRounded';
+import AddExerciseBar from '../components/AddExerciseBar';
 
 const Styles = theme => ({
     container: {
@@ -34,32 +32,12 @@ const Styles = theme => ({
         minWidth: '120px',
         background: '#ffffff',
     },
-    addExerciseDiv: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        background: 'gray',
-        maxWidth: '165px',
-        margin: '5px',
-        borderRadius: '50px',
-    },
-    fab: {
-        // margin: '10px',
-    },
-    icon: {
-        height: '50px',
-        width: '50px',
-        margin: '0 2px',
-    },
-    selected: {
-        background: '#A1CCA5',
-    },
 });
 
 const steps = ['Name Routine', 'Add Exercises'];
 
 class CreateRoutine extends Component {
-    state = { step: 0, routine: { name: '', weekday: '' } };
+    state = { step: 1, routine: { name: '', weekday: '' } };
 
     updateField(field, value) {
         let { routine } = this.state;
@@ -195,23 +173,7 @@ class AddExercises extends Component {
                         ></Button>
                     </div>
                 ))}
-                <div className={classes.addExerciseDiv}>
-                    <IconButton
-                        className={clsx(classes.icon, addType && classes.selected)}
-                        onClick={() => this.setState({ addType: true })}
-                    >
-                        <FitnessCenterRoundedIcon />
-                    </IconButton>
-                    <IconButton
-                        className={clsx(classes.icon, !addType && classes.selected)}
-                        onClick={() => this.setState({ addType: false })}
-                    >
-                        <DirectionsRunRoundedIcon />
-                    </IconButton>
-                    <Fab className={classes.fab} onClick={() => this.addExercise()}>
-                        <AddIcon />
-                    </Fab>
-                </div>
+                <AddExerciseBar />
             </div>
         );
     }

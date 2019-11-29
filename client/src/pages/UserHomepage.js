@@ -21,8 +21,14 @@ import { getSessionsState } from '../redux/selectors';
 
 const Styles = theme => ({
     container: {
+        position: 'relative',
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
+    },
+    sessions: {
+        overflow: 'auto',
     },
     addButton: {
         position: 'absolute',
@@ -61,19 +67,15 @@ class UserHomepage extends Component {
                 <Button onClick={this.handleAddSession} color="primary" variant="contained">
                     Create Blank Session
                 </Button>
-                <AppBar>
-                    <Toolbar>
-                        <Button href="/users/home">Dashboard</Button>
-                        <Button href="/users/createroutine">Create Routine</Button>
-                    </Toolbar>
-                </AppBar>
                 <h2>Today's Sessions:</h2>
-                {sessions.map(el => (
-                    <div>
-                        <label>{el.id}</label>
-                        <label>{el.date.toString()}</label>
-                    </div>
-                ))}
+                <div className={classes.sessions}>
+                    {sessions.map(el => (
+                        <div>
+                            <label>{el.id}</label>
+                            <label>{el.date.toString()}</label>
+                        </div>
+                    ))}
+                </div>
                 {sessions.length === 0 ? (
                     <Button onClick={() => this.addSession()}>Start a workout!</Button>
                 ) : null}

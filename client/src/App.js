@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import UserHomepage from './components/UserHomepage';
-import Session from './components/Session';
-import RequestReset from './components/RequestReset';
-import Login from './components/Login';
-import Register from './components/Register';
+import UserHomepage from './pages/UserHomepage';
+import Session from './pages/Session';
+import RequestReset from './pages/RequestReset';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import CreateRoutine from './components/CreateRoutine';
-import LandingPage from './components/LandingPage';
+import LandingPage from './pages/LandingPage';
+import AppBar from './components/AppBar';
 
 import { withStyles } from '@material-ui/styles';
-import './App.css';
 
 const AppStyle = theme => ({
     container: {},
@@ -30,32 +30,35 @@ class App extends Component {
         console.log(user);
         return (
             <div className="App">
-                <div className="App-header">
-                    <BrowserRouter>
-                        <Switch>
-                            <Route exact path="/">
-                                <LandingPage />
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/">
+                            <LandingPage />
+                        </Route>
+                        <Route exact path="/users/register">
+                            <Register />
+                        </Route>
+                        <Route exact path="/users/login">
+                            <Login />
+                        </Route>
+                        <Route exact path="/users/password/forgot">
+                            <RequestReset Reset />
+                        </Route>
+                        <Route exact path="/users/routines/create">
+                            <CreateRoutine />
+                        </Route>
+                    </Switch>
+                    {user == null ? (
+                        <Redirect
+                            to={{
+                                pathname: '/users/login',
+                            }}
+                        />
+                    ) : (
+                        <React.Fragment>
+                            <Route>
+                                <AppBar />
                             </Route>
-                            <Route exact path="/users/register">
-                                <Register />
-                            </Route>
-                            <Route exact path="/users/login">
-                                <Login />
-                            </Route>
-                            <Route exact path="/users/password/forgot">
-                                <RequestReset Reset />
-                            </Route>
-                            <Route exact path="/users/routines/create">
-                                <CreateRoutine />
-                            </Route>
-                        </Switch>
-                        {user == null ? (
-                            <Redirect
-                                to={{
-                                    pathname: '/users/login',
-                                }}
-                            />
-                        ) : (
                             <Switch>
                                 <Route exact path="/users/home" component={UserHomepage} />
                                 <Route exact path="/users/session">
@@ -65,10 +68,9 @@ class App extends Component {
                                     <CreateRoutine />
                                 </Route>
                             </Switch>
-                        )}
-                    </BrowserRouter>
-                    {/* <CreateRoutine /> */}
-                </div>
+                        </React.Fragment>
+                    )}
+                </BrowserRouter>
             </div>
         );
     }

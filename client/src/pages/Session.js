@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 
-import AddExerciseMenu from './AddExerciseMenu';
-import SessionExercise from './SessionExercise';
+import AddExerciseMenu from '../components/AddExerciseMenu';
+import SessionExercise from '../components/SessionExercise';
 
 const Styles = theme => ({
     container: {
