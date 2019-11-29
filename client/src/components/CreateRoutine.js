@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    IconButton,
+    Box,
     TextField,
     Button,
     Select,
@@ -17,6 +17,10 @@ import { withStyles } from '@material-ui/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddExerciseBar from '../components/AddExerciseBar';
 
+import DirectionsRunRoundedIcon from '@material-ui/icons/DirectionsRunRounded';
+import FitnessCenterRoundedIcon from '@material-ui/icons/FitnessCenterRounded';
+import DragHandleIcon from '@material-ui/icons/DragHandle';
+
 const Styles = theme => ({
     container: {
         display: 'flex',
@@ -27,10 +31,22 @@ const Styles = theme => ({
     input: {
         background: '#ffffff',
     },
-    exerciseRow: {},
+    setInput: {
+        maxWidth: '140px',
+    },
+    exerciseRow: {
+        display: 'flex',
+        alignItems: 'center',
+    },
     formControl: {
         minWidth: '120px',
         background: '#ffffff',
+    },
+    exerciseName: {
+        flex: 1,
+        margin: '0 10px',
+        fontSize: '1.3em',
+        fontWeight: '500',
     },
 });
 
@@ -64,7 +80,7 @@ class CreateRoutine extends Component {
         }
         if (step === 2) {
         }
-        this.setState({ step: step + 1 });
+        this.setState({ step: step + 1, inputError: null });
     }
 
     render() {
@@ -121,7 +137,7 @@ class CreateRoutine extends Component {
 }
 
 class AddExercises extends Component {
-    state = { exercises: [{ name: '', sets: '' }], addType: true };
+    state = { exercises: [{ name: 'Test', type: 'weights' }], addType: true };
 
     deleteExercise(ind) {
         const { exercises } = this.state;
@@ -132,16 +148,24 @@ class AddExercises extends Component {
         }
     }
 
-    addExercise() {
+    addExercise(name, type) {
         const { exercises } = this.state;
         let temp = exercises.slice();
-        temp.push({ name: '', sets: '' });
+        temp.push({ name: name, sets: '', type });
         this.setState({ exercises: temp });
     }
 
     updateField(ind, field, value) {
         const { exercises } = this.state;
-        exercises[ind][field] = value;
+        if (field === 'sets') {
+            console.log(value.split(''));
+            if (value.split('').every(el => el.charCodeAt(0) > 47 && el.charCodeAt(0) < 58)) {
+                console.log(true);
+            }
+        } else {
+            console.log('here');
+            exercises[ind][field] = value;
+        }
         this.setState({ exercises });
     }
 
@@ -154,17 +178,20 @@ class AddExercises extends Component {
                 <h2>{`${routine.name}${routine.weekday ? ` (${routine.weekday})` : ''}`}</h2>
                 {exercises.map((el, ind) => (
                     <div className={classes.exerciseRow}>
+                        {/* <DragHandleIcon /> MAKE DRAGABLE */}
+                        <label className={classes.exerciseName}>{el.name}</label>
+                        {el.type === 'weights' ? (
+                            <FitnessCenterRoundedIcon />
+                        ) : (
+                            <DirectionsRunRoundedIcon />
+                        )}
                         <TextField
-                            className={classes.input}
-                            value={el.name}
-                            onChange={e => this.updateField(ind, 'name', e.target.value)}
-                            label="Exercise name"
-                        />
-                        <TextField
-                            className={classes.input}
+                            className={clsx(classes.input, classes.setInput)}
                             value={el.sets}
+                            variant="outlined"
                             onChange={e => this.updateField(ind, 'sets', e.target.value)}
-                            label="Number of sets"
+                            placeholder="Number of sets"
+                            margin="dense"
                         />
                         <Button
                             disabled={last ? true : false}
@@ -173,7 +200,7 @@ class AddExercises extends Component {
                         ></Button>
                     </div>
                 ))}
-                <AddExerciseBar />
+                <AddExerciseBar addExercise={(name, type) => this.addExercise(name, type)} />
             </div>
         );
     }

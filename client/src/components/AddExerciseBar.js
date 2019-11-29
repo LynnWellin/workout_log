@@ -12,7 +12,7 @@ const Styles = theme => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        background: 'gray',
+        background: '#CDD6DD',
         margin: '5px',
         borderRadius: '50px',
     },
@@ -34,15 +34,28 @@ const Styles = theme => ({
 });
 
 class AddExercise extends Component {
-    state = { type: true, name: '' };
+    state = { type: true, name: '', error: null };
+
+    addExercise() {
+        const { type, name } = this.state;
+        if (name !== '') {
+            this.setState({ error: null, name: '' });
+            this.props.addExercise(name, type ? 'weights' : 'cardio');
+        } else {
+            this.setState({ error: 'Name cannot be empty' });
+        }
+    }
 
     render() {
         const { classes } = this.props;
-        const { type, name } = this.state;
+        const { type, name, error } = this.state;
         return (
             <div className={classes.container}>
                 <TextField
+                    error={Boolean(error)}
+                    helperText={error}
                     placeholder="Exercise name"
+                    margin="dense"
                     value={name}
                     onChange={e => this.setState({ name: e.target.value })}
                 />
@@ -58,7 +71,7 @@ class AddExercise extends Component {
                     selected={!type}
                     select={() => this.setState({ type: false })}
                 />
-                <Fab className={classes.fab} onClick={() => this.props.addExercise()}>
+                <Fab className={classes.fab} onClick={() => this.addExercise()}>
                     <AddIcon />
                 </Fab>
             </div>

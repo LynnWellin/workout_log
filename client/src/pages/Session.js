@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/styles';
 
-import AddExerciseMenu from '../components/AddExerciseMenu';
 import SessionExercise from '../components/SessionExercise';
+import AddExerciseBar from '../components/AddExerciseBar';
 
 const Styles = theme => ({
     container: {
@@ -40,7 +40,7 @@ class Session extends Component {
                 {exercises.map((el, i) => (
                     <SessionExercise key={i + el.exercise} {...el} />
                 ))}
-                <AddExerciseMenu addExercise={(name, type) => this.addExercise(name, type)} />
+                <AddExerciseBar addExercise={(name, type) => this.addExercise(name, type)} />
             </div>
         );
     }
