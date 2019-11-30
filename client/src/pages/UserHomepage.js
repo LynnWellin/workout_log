@@ -24,8 +24,16 @@ const Styles = theme => ({
         position: 'relative',
         flex: 1,
         display: 'flex',
+        alignItems: 'center',
         flexDirection: 'column',
         overflow: 'hidden',
+    },
+    homeTitle: {
+        margin: '10px',
+        marginTop: 0,
+        textAlign: 'center',
+        width: '50%',
+        borderBottom: '1px solid #00000030',
     },
     sessions: {
         overflow: 'auto',
@@ -35,10 +43,15 @@ const Styles = theme => ({
         bottom: 20,
         right: 20,
     },
+    noEntry: {
+        margin: '20px 0',
+        textAlign: 'center',
+        width: '80%',
+    },
 });
 
 class UserHomepage extends Component {
-    state = { routines: ['Routine 1', 'Routine 2'], openDialog: false, selected: null };
+    state = { routines: [], openDialog: false, selected: null };
     handleAddSession = () => {
         console.log('here');
         console.log(this.props);
@@ -64,10 +77,10 @@ class UserHomepage extends Component {
         console.log(sessions);
         return (
             <div className={classes.container}>
-                <Button onClick={this.handleAddSession} color="primary" variant="contained">
+                {/* <Button onClick={this.handleAddSession} color="primary" variant="contained">
                     Create Blank Session
-                </Button>
-                <h2>Today's Sessions:</h2>
+                </Button> */}
+                <h2 className={classes.homeTitle}>Today's Sessions:</h2>
                 <div className={classes.sessions}>
                     {sessions.map(el => (
                         <div>
@@ -77,7 +90,12 @@ class UserHomepage extends Component {
                     ))}
                 </div>
                 {sessions.length === 0 ? (
-                    <Button onClick={() => this.addSession()}>Start a workout!</Button>
+                    <React.Fragment>
+                        <label className={classes.noEntry}>No workouts recorded today</label>
+                        <Button color="primary" onClick={() => this.addSession()}>
+                            Start a workout!
+                        </Button>
+                    </React.Fragment>
                 ) : null}
                 <Fab
                     onClick={() => this.addSession()}

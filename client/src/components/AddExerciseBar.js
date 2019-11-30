@@ -31,6 +31,9 @@ const Styles = theme => ({
     selected: {
         background: '#A1CCA5',
     },
+    exerciseName: {
+        margin: '0 15px',
+    },
 });
 
 class AddExercise extends Component {
@@ -52,6 +55,7 @@ class AddExercise extends Component {
         return (
             <div className={classes.container}>
                 <TextField
+                    className={classes.exerciseName}
                     error={Boolean(error)}
                     helperText={error}
                     placeholder="Exercise name"

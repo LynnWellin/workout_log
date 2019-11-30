@@ -28,6 +28,9 @@ const Styles = theme => ({
         padding: '5px',
         margin: '5px',
     },
+    title: {
+        textAlign: 'center',
+    },
     input: {
         background: '#ffffff',
     },
@@ -48,12 +51,22 @@ const Styles = theme => ({
         fontSize: '1.3em',
         fontWeight: '500',
     },
+    noEntry: {
+        width: '100%',
+        margin: '20px 0',
+        textAlign: 'center',
+        width: '80%',
+    },
+    stepperButtons: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
 });
 
 const steps = ['Name Routine', 'Add Exercises'];
 
 class CreateRoutine extends Component {
-    state = { step: 1, routine: { name: '', weekday: '' } };
+    state = { step: 0, routine: { name: '', weekday: '' } };
 
     updateField(field, value) {
         let { routine } = this.state;
@@ -88,7 +101,7 @@ class CreateRoutine extends Component {
         const { step, routine, inputError } = this.state;
         return (
             <div>
-                <h1>Create new Routine</h1>
+                <h1 className={classes.title}>Create new Routine</h1>
                 {step === 0 ? (
                     <FirstStep
                         inputError={inputError}
@@ -105,39 +118,62 @@ class CreateRoutine extends Component {
                         updateField={(field, value) => this.updateField(field, value)}
                     />
                 ) : null}
-                <Stepper activeStep={step}>
-                    {steps.map((label, index) => {
-                        return (
-                            <Step>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        );
-                    })}
-                </Stepper>
-                <div>
-                    <Button
-                        disabled={step === 0}
-                        onClick={() => this.handleBack()}
-                        className={classes.button}
-                    >
-                        Back
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => this.handleNext()}
-                        className={classes.button}
-                    >
-                        {step === steps.length - 1 ? 'Finish' : 'Next'}
-                    </Button>
-                </div>
+                {step < 2 ? (
+                    <React.Fragment>
+                        <Stepper activeStep={step}>
+                            {steps.map((label, index) => {
+                                return (
+                                    <Step>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                        <div className={classes.stepperButtons}>
+                            <Button
+                                disabled={step === 0}
+                                onClick={() => this.handleBack()}
+                                className={classes.button}
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => this.handleNext()}
+                                className={classes.button}
+                            >
+                                {step === steps.length - 1 ? 'Finish' : 'Next'}
+                            </Button>
+                        </div>
+                    </React.Fragment>
+                ) : (
+                    <React.Fragment>
+                        <label>You have successfully created a new routine</label>
+                        <div className={classes.stepperButtons}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                href="/users/routines"
+                                className={classes.button}
+                            >
+                                Done
+                            </Button>
+                        </div>
+                    </React.Fragment>
+                )}
             </div>
         );
     }
 }
 
 class AddExercises extends Component {
-    state = { exercises: [{ name: 'Test', type: 'weights' }], addType: true };
+    state = {
+        exercises: [
+            /*{ name: 'Test', type: 'weights' }*/
+        ],
+        addType: true,
+    };
 
     deleteExercise(ind) {
         const { exercises } = this.state;
@@ -161,6 +197,7 @@ class AddExercises extends Component {
             console.log(value.split(''));
             if (value.split('').every(el => el.charCodeAt(0) > 47 && el.charCodeAt(0) < 58)) {
                 console.log(true);
+                exercises[ind][field] = value;
             }
         } else {
             console.log('here');
@@ -175,7 +212,14 @@ class AddExercises extends Component {
         const last = exercises.length === 1 ? true : false;
         return (
             <div>
-                <h2>{`${routine.name}${routine.weekday ? ` (${routine.weekday})` : ''}`}</h2>
+                <h2 className={classes.title}>{`${routine.name}${
+                    routine.weekday ? ` (${routine.weekday})` : ''
+                }`}</h2>
+                {exercises.length === 0 ? (
+                    <label className={classes.noEntry}>
+                        Add at least one exercise to your routine
+                    </label>
+                ) : null}
                 {exercises.map((el, ind) => (
                     <div className={classes.exerciseRow}>
                         {/* <DragHandleIcon /> MAKE DRAGABLE */}

@@ -37,11 +37,13 @@ class SetData {
 class SessionExercise extends Component {
     constructor(props) {
         super(props);
+        const { expanded } = props;
         let sets = [];
         for (let i = 0; i < props.sets; i++) {
             sets.push(new SetData());
         }
-        this.state = { sets };
+        console.log('Expanded: ', Boolean(expanded));
+        this.state = { sets, expanded: Boolean(expanded) };
     }
 
     // Deletes set at index ind
@@ -76,9 +78,14 @@ class SessionExercise extends Component {
 
     render() {
         const { classes, exercise, type } = this.props;
-        const { sets } = this.state;
+        const { sets, expanded } = this.state;
         return (
-            <ExpansionPanel id={exercise} classes={classes}>
+            <ExpansionPanel
+                id={exercise}
+                classes={classes}
+                onChange={() => this.setState({ expanded: !expanded })}
+                expanded={expanded}
+            >
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                     {exercise}
                 </ExpansionPanelSummary>

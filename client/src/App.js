@@ -10,6 +10,7 @@ import LandingPage from './pages/LandingPage';
 import AppBar from './components/AppBar';
 
 import { withStyles } from '@material-ui/styles';
+import Routines from './pages/Routines';
 
 const AppStyle = theme => ({
     container: {},
@@ -63,6 +64,9 @@ class App extends Component {
                                 <Route exact path="/users/home" component={UserHomepage} />
                                 <Route exact path="/users/session">
                                     <Session />
+                                </Route>
+                                <Route exact path="/users/routines">
+                                    <Routines />
                                 </Route>
                                 <Route exact path="/users/createroutine">
                                     <CreateRoutine />
